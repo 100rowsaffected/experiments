@@ -125,68 +125,6 @@ INSERT INTO TEACHES VALUES
   98345, 'EE-181', '1', 'Spring', '2017'
 );
 SELECT * FROM INSTRUCTOR;
-SELECT * FROM TEACHES;
--- THREE
-INSERT INTO INSTRUCTOR VALUES
-(
-  '10211', 'Smith', 'Biology', '66000'
-);
-SELECT * FROM INSTRUCTOR;
--- FOUR
-DELETE FROM INSTRUCTOR WHERE ID = '10211';
-SELECT * FROM INSTRUCTOR;
--- FIVE
-SELECT * FROM INSTRUCTOR WHERE Dept_Name = 'History';
--- SIX
-SELECT * FROM INSTRUCTOR CROSS JOIN TEACHES;
--- SEVEN
-SELECT Name, Course_ID FROM INSTRUCTOR INNER JOIN TEACHES ON INSTRUCTOR.ID = TEACHES.ID;
--- EIGHT
-SELECT * FROM INSTRUCTOR WHERE NAME LIKE '%in%';
--- NINE
-SELECT * FROM INSTRUCTOR WHERE Salary BETWEEN 90000 AND 100000;
--- EXPERIMENT TWO
--- ONE
-SELECT * FROM INSTRUCTOR order by salary ASC;
--- TWO
-SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") or (SEMESTER = "Spring" and YEAR = "2018");
--- THREE
-SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") and (SEMESTER = "Spring" and YEAR = "2018");
--- FOUR
-SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017");
--- FIVE
-INSERT INTO INSTRUCTOR VALUES
-( 
-  '10211', 'Smith', 'Biology', 66000
-);
-INSERT INTO INSTRUCTOR VALUES
-(
-  '10212', 'Tom', 'Biology', NULL
-);
-SELECT * FROM INSTRUCTOR;
--- SIX
-SELECT * FROM INSTRUCTOR where salary = NULL;
--- SEVEN
-SELECT AVG(salary) FROM INSTRUCTOR;
--- EXPERIMENT3
--- ONE
-SELECT COUNT(DISTINCT ID) AS total_instructors_spring_2018 FROM TEACHES WHERE SEMESTER = 'Spring' AND YEAR = 2018;
--- TWO
-SELECT COUNT(*) AS number_of_tuples FROM TEACHES;
--- THREE
-SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name;
--- FOUR
-SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name HAVING avg_salary > 42000;
--- FIVE
-SELECT name FROM INSTRUCTOR WHERE name NOT IN ('Mozart', 'Einstein');
--- SIX
-SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ANY (SELECT salary FROM INSTRUCTOR WHERE dept_name = 'Biology');
--- SEVEN
-SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ALL (SELECT salary FROM INSTRUCTOR WHERE dept_name = 'Biology');
--- EIGHT
-SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name HAVING AVG(salary) > 42000;
-
-Output:
 
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
@@ -204,6 +142,9 @@ Output:
 | 83821 | Brandt     | Comp. Sci. |  92000 |
 | 98345 | Kim        | Elec. Eng. |  80000 |
 +-------+------------+------------+--------+
+
+SELECT * FROM TEACHES;
+
 +-------+-----------+--------+----------+------+
 | ID    | Course_ID | Sec_ID | Semester | Year |
 +-------+-----------+--------+----------+------+
@@ -223,6 +164,14 @@ Output:
 | 83821 | CS-319    | 2      | Spring   | 2017 |
 | 98345 | EE-181    | 1      | Spring   | 2017 |
 +-------+-----------+--------+----------+------+
+
+-- THREE
+INSERT INTO INSTRUCTOR VALUES
+(
+  '10211', 'Smith', 'Biology', '66000'
+);
+SELECT * FROM INSTRUCTOR;
+
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
 +-------+------------+------------+--------+
@@ -240,6 +189,11 @@ Output:
 | 83821 | Brandt     | Comp. Sci. |  92000 |
 | 98345 | Kim        | Elec. Eng. |  80000 |
 +-------+------------+------------+--------+
+
+-- FOUR
+DELETE FROM INSTRUCTOR WHERE ID = '10211';
+SELECT * FROM INSTRUCTOR;
+
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
 +-------+------------+------------+--------+
@@ -256,12 +210,20 @@ Output:
 | 83821 | Brandt     | Comp. Sci. |  92000 |
 | 98345 | Kim        | Elec. Eng. |  80000 |
 +-------+------------+------------+--------+
+
+-- FIVE
+SELECT * FROM INSTRUCTOR WHERE Dept_Name = 'History';
+
 +-------+-----------+-----------+--------+
 | ID    | Name      | Dept_Name | Salary |
 +-------+-----------+-----------+--------+
 | 32343 | El Said   | History   |  60000 |
 | 58583 | Califieri | History   |  62000 |
 +-------+-----------+-----------+--------+
+
+-- SIX
+SELECT * FROM INSTRUCTOR CROSS JOIN TEACHES;
+
 +-------+------------+------------+--------+-------+-----------+--------+----------+------+
 | ID    | Name       | Dept_Name  | Salary | ID    | Course_ID | Sec_ID | Semester | Year |
 +-------+------------+------------+--------+-------+-----------+--------+----------+------+
@@ -446,6 +408,10 @@ Output:
 | 12121 | Wu         | Finance    |  90000 | 98345 | EE-181    | 1      | Spring   | 2017 |
 | 10101 | Srinivasan | Comp. Sci. |  65000 | 98345 | EE-181    | 1      | Spring   | 2017 |
 +-------+------------+------------+--------+-------+-----------+--------+----------+------+
+
+-- SEVEN
+SELECT Name, Course_ID FROM INSTRUCTOR INNER JOIN TEACHES ON INSTRUCTOR.ID = TEACHES.ID;
+
 +------------+-----------+
 | Name       | Course_ID |
 +------------+-----------+
@@ -465,6 +431,10 @@ Output:
 | Brandt     | CS-319    |
 | Kim        | EE-181    |
 +------------+-----------+
+
+-- EIGHT
+SELECT * FROM INSTRUCTOR WHERE NAME LIKE '%in%';
+
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
 +-------+------------+------------+--------+
@@ -472,6 +442,10 @@ Output:
 | 22222 | Einstein   | Physics    |  95000 |
 | 76543 | Singh      | Finance    |  80000 |
 +-------+------------+------------+--------+
+
+-- NINE
+SELECT * FROM INSTRUCTOR WHERE Salary BETWEEN 90000 AND 100000;
+
 +-------+----------+------------+--------+
 | ID    | Name     | Dept_Name  | Salary |
 +-------+----------+------------+--------+
@@ -479,6 +453,11 @@ Output:
 | 22222 | Einstein | Physics    |  95000 |
 | 83821 | Brandt   | Comp. Sci. |  92000 |
 +-------+----------+------------+--------+
+
+-- EXPERIMENT TWO
+-- ONE
+SELECT * FROM INSTRUCTOR order by salary ASC;
+
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
 +-------+------------+------------+--------+
@@ -495,6 +474,30 @@ Output:
 | 83821 | Brandt     | Comp. Sci. |  92000 |
 | 22222 | Einstein   | Physics    |  95000 |
 +-------+------------+------------+--------+
+
+-- TWO
+SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") or (SEMESTER = "Spring" and YEAR = "2018");
+
++-------+------------+------------+--------+
+| ID    | Name       | Dept_Name  | Salary |
++-------+------------+------------+--------+
+| 15151 | Mozart     | Music      |  40000 |
+| 32343 | El Said    | History    |  60000 |
+| 58583 | Califieri  | History    |  62000 |
+| 10101 | Srinivasan | Comp. Sci. |  65000 |
+| 76766 | Crick      | Biology    |  72000 |
+| 45565 | Katz       | Comp. Sci. |  75000 |
+| 76543 | Singh      | Finance    |  80000 |
+| 98345 | Kim        | Elec. Eng. |  80000 |
+| 33456 | Gold       | Physics    |  87000 |
+| 12121 | Wu         | Finance    |  90000 |
+| 83821 | Brandt     | Comp. Sci. |  92000 |
+| 22222 | Einstein   | Physics    |  95000 |
++-------+------------+------------+--------+
+
+-- THREE
+SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") and (SEMESTER = "Spring" and YEAR = "2018");
+
 +-----------+
 | COURSE_ID |
 +-----------+
@@ -508,6 +511,10 @@ Output:
 | CS-101    |
 | CS-319    |
 +-----------+
+
+-- FOUR
+SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017");
+
 +-----------+
 | COURSE_ID |
 +-----------+
@@ -515,6 +522,18 @@ Output:
 | CS-347    |
 | PHY-101   |
 +-----------+
+
+-- FIVE
+INSERT INTO INSTRUCTOR VALUES
+( 
+  '10211', 'Smith', 'Biology', 66000
+);
+INSERT INTO INSTRUCTOR VALUES
+(
+  '10212', 'Tom', 'Biology', NULL
+);
+SELECT * FROM INSTRUCTOR;
+
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
 +-------+------------+------------+--------+
@@ -533,21 +552,47 @@ Output:
 | 83821 | Brandt     | Comp. Sci. |  92000 |
 | 98345 | Kim        | Elec. Eng. |  80000 |
 +-------+------------+------------+--------+
+
+-- SIX
+SELECT * FROM INSTRUCTOR WHERE Salary IS NULL;
+
++-------+------+-----------+--------+
+| ID    | Name | Dept_Name | Salary |
++-------+------+-----------+--------+
+| 10212 | Tom  | Biology   |   NULL |
++-------+------+-----------+--------+
+
+-- SEVEN
+SELECT AVG(Salary) FROM INSTRUCTOR;
+
 +-------------+
-| AVG(salary) |
+| AVG(Salary) |
 +-------------+
 |  74153.8462 |
 +-------------+
+
+-- EXPERIMENT3
+-- ONE
+SELECT COUNT(DISTINCT ID) AS total_instructors_spring_2018 FROM TEACHES WHERE SEMESTER = 'Spring' AND YEAR = 2018;
+
 +-------------------------------+
 | total_instructors_spring_2018 |
 +-------------------------------+
 |                             5 |
 +-------------------------------+
+
+-- TWO
+SELECT COUNT(*) AS number_of_tuples FROM TEACHES;
+
 +------------------+
 | number_of_tuples |
 +------------------+
 |               15 |
 +------------------+
+
+-- THREE
+SELECT dept_name, AVG(Salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name;
+
 +------------+------------+
 | dept_name  | avg_salary |
 +------------+------------+
@@ -559,6 +604,10 @@ Output:
 | History    | 61000.0000 |
 | Elec. Eng. | 80000.0000 |
 +------------+------------+
+
+-- FOUR
+SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name HAVING avg_salary > 42000;
+
 +------------+------------+
 | dept_name  | avg_salary |
 +------------+------------+
@@ -569,6 +618,10 @@ Output:
 | History    | 61000.0000 |
 | Elec. Eng. | 80000.0000 |
 +------------+------------+
+
+-- FIVE
+SELECT name FROM INSTRUCTOR WHERE name NOT IN ('Mozart', 'Einstein');
+
 +------------+
 | name       |
 +------------+
@@ -585,6 +638,10 @@ Output:
 | Brandt     |
 | Kim        |
 +------------+
+
+-- SIX
+SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ANY (SELECT salary FROM INSTRUCTOR WHERE dept_name = 'Biology');
+
 +----------+
 | name     |
 +----------+
@@ -597,6 +654,26 @@ Output:
 | Brandt   |
 | Kim      |
 +----------+
+
+-- SEVEN
+SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ALL (SELECT salary FROM INSTRUCTOR WHERE dept_name = 'Biology');
+
++----------+
+| name     |
++----------+
+| Wu       |
+| Einstein |
+| Gold     |
+| Katz     |
+| Singh    |
+| Crick    |
+| Brandt   |
+| Kim      |
++----------+
+
+-- EIGHT
+SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name HAVING AVG(salary) > 42000;
+
 +------------+------------+
 | dept_name  | avg_salary |
 +------------+------------+
