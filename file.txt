@@ -433,7 +433,7 @@ SELECT Name, Course_ID FROM INSTRUCTOR INNER JOIN TEACHES ON INSTRUCTOR.ID = TEA
 +------------+-----------+
 
 -- EIGHT
-SELECT * FROM INSTRUCTOR WHERE NAME LIKE '%in%';
+SELECT * FROM INSTRUCTOR WHERE Name LIKE '%in%';
 
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
@@ -456,7 +456,7 @@ SELECT * FROM INSTRUCTOR WHERE Salary BETWEEN 90000 AND 100000;
 
 -- EXPERIMENT TWO
 -- ONE
-SELECT * FROM INSTRUCTOR order by salary ASC;
+SELECT * FROM INSTRUCTOR order by Salary ASC;
 
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
@@ -476,7 +476,7 @@ SELECT * FROM INSTRUCTOR order by salary ASC;
 +-------+------------+------------+--------+
 
 -- TWO
-SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") or (SEMESTER = "Spring" and YEAR = "2018");
+SELECT COURSE_ID FROM TEACHES WHERE (Semester = "Fall" and Year = "2017") or (Semester = "Spring" and Year = "2018");
 
 +-------+------------+------------+--------+
 | ID    | Name       | Dept_Name  | Salary |
@@ -496,7 +496,7 @@ SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") or (SE
 +-------+------------+------------+--------+
 
 -- THREE
-SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") and (SEMESTER = "Spring" and YEAR = "2018");
+SELECT COURSE_ID FROM TEACHES WHERE (Semester = "Fall" and Year = "2017") and (Semester = "Spring" and Year = "2018");
 
 +-----------+
 | COURSE_ID |
@@ -513,7 +513,7 @@ SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017") and (S
 +-----------+
 
 -- FOUR
-SELECT COURSE_ID FROM TEACHES where (SEMESTER = "Fall" and YEAR = "2017");
+SELECT COURSE_ID FROM TEACHES WHERE (Semester = "Fall" and Year = "2017");
 
 +-----------+
 | COURSE_ID |
@@ -573,28 +573,28 @@ SELECT AVG(Salary) FROM INSTRUCTOR;
 
 -- EXPERIMENT THREE
 -- ONE
-SELECT COUNT(DISTINCT ID) AS total_instructors_spring_2018 FROM TEACHES WHERE SEMESTER = 'Spring' AND YEAR = 2018;
+SELECT COUNT(DISTINCT ID) AS Total_Instructors_Spring_2018 FROM TEACHES WHERE Semester = 'Spring' AND Year = 2018;
 
 +-------------------------------+
-| total_instructors_spring_2018 |
+| Total_Instructors_Spring_2018 |
 +-------------------------------+
 |                             5 |
 +-------------------------------+
 
 -- TWO
-SELECT COUNT(*) AS number_of_tuples FROM TEACHES;
+SELECT COUNT(*) AS Number_Of_Tuples FROM TEACHES;
 
 +------------------+
-| number_of_tuples |
+| Number_Of_Tuples |
 +------------------+
 |               15 |
 +------------------+
 
 -- THREE
-SELECT dept_name, AVG(Salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name;
+SELECT Dept_Name, AVG(Salary) AS Avg_Salary FROM INSTRUCTOR GROUP BY Dept_Name;
 
 +------------+------------+
-| dept_name  | avg_salary |
+| Dept_Name  | Avg_Salary |
 +------------+------------+
 | Comp. Sci. | 77333.3333 |
 | Biology    | 69000.0000 |
@@ -606,10 +606,10 @@ SELECT dept_name, AVG(Salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name;
 +------------+------------+
 
 -- FOUR
-SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name HAVING avg_salary > 42000;
+SELECT Dept_Name, AVG(Salary) AS Avg_Salary FROM INSTRUCTOR GROUP BY Dept_Name HAVING Avg_Salary > 42000;
 
 +------------+------------+
-| dept_name  | avg_salary |
+| Dept_Name  | Avg_Salary |
 +------------+------------+
 | Comp. Sci. | 77333.3333 |
 | Biology    | 69000.0000 |
@@ -620,10 +620,10 @@ SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name H
 +------------+------------+
 
 -- FIVE
-SELECT name FROM INSTRUCTOR WHERE name NOT IN ('Mozart', 'Einstein');
+SELECT Name FROM INSTRUCTOR WHERE Name NOT IN ('Mozart', 'Einstein');
 
 +------------+
-| name       |
+| Name       |
 +------------+
 | Srinivasan |
 | Smith      |
@@ -640,10 +640,10 @@ SELECT name FROM INSTRUCTOR WHERE name NOT IN ('Mozart', 'Einstein');
 +------------+
 
 -- SIX
-SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ANY (SELECT salary FROM INSTRUCTOR WHERE dept_name = 'Biology');
+SELECT e.Name FROM INSTRUCTOR e WHERE e.Salary > ANY (SELECT Salary FROM INSTRUCTOR WHERE Dept_Name = 'Biology');
 
 +----------+
-| name     |
+| Name     |
 +----------+
 | Wu       |
 | Einstein |
@@ -656,10 +656,10 @@ SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ANY (SELECT salary FROM INSTRUC
 +----------+
 
 -- SEVEN
-SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ALL (SELECT salary FROM INSTRUCTOR WHERE dept_name = 'Biology');
+SELECT e.Name FROM INSTRUCTOR e WHERE e.Salary > ALL (SELECT Salary FROM INSTRUCTOR WHERE Dept_Name = 'Biology');
 
 +----------+
-| name     |
+| Name     |
 +----------+
 | Wu       |
 | Einstein |
@@ -672,10 +672,10 @@ SELECT e.name FROM INSTRUCTOR e WHERE e.salary > ALL (SELECT salary FROM INSTRUC
 +----------+
 
 -- EIGHT
-SELECT dept_name, AVG(salary) AS avg_salary FROM INSTRUCTOR GROUP BY dept_name HAVING AVG(salary) > 42000;
+SELECT Dept_Name, AVG(Salary) AS Avg_Salary FROM INSTRUCTOR GROUP BY Dept_Name HAVING AVG(Salary) > 42000;
 
 +------------+------------+
-| dept_name  | avg_salary |
+| Dept_Name  | Avg_Salary |
 +------------+------------+
 | Comp. Sci. | 77333.3333 |
 | Biology    | 69000.0000 |
