@@ -684,3 +684,42 @@ SELECT Dept_Name, AVG(Salary) AS Avg_Salary FROM INSTRUCTOR GROUP BY Dept_Name H
 | History    | 61000.0000 |
 | Elec. Eng. | 80000.0000 |
 +------------+------------+
+
+-- EXPERIMENT FOUR
+-- ONE
+SELECT Dept_Name FROM INSTRUCTOR WHERE Salary > 74153.8462 ;
+
++------------+
+| Dept_Name  |
++------------+
+| Finance    |
+| Physics    |
+| Physics    |
+| Comp. Sci. |
+| Finance    |
+| Comp. Sci. |
+| Elec. Eng. |
++------------+
+
+-- TWO
+SELECT Name, Course_ID FROM INSTRUCTOR INNER JOIN TEACHES ON INSTRUCTOR.ID = TEACHES.ID;
+
++------------+-----------+
+| Name       | Course_ID |
++------------+-----------+
+| Srinivasan | CS-101    |
+| Srinivasan | CS-315    |
+| Srinivasan | CS-347    |
+| Wu         | FIN-201   |
+| Mozart     | MU-315    |
+| Einstein   | PHY-101   |
+| El Said    | HIS-315   |
+| Katz       | CS-101    |
+| Katz       | CS-319    |
+| Crick      | BIO-101   |
+| Crick      | BIO-301   |
+| Brandt     | CS-190    |
+| Brandt     | CS-190    |
+| Brandt     | CS-319    |
+| Kim        | EE-181    |
++------------+-----------+
