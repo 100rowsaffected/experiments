@@ -141,7 +141,7 @@ conn.close()
 
 #output
 
-# ❯ python 22-04-24.py
+# ❯ python main.py
 # 1. Tuples in the instructors relation ordered by salary:
 # (10212, 'Tom', 'Biology', 0)
 # (15151, 'Mozart', 'Music', 40000)
