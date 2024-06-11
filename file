@@ -1,0 +1,457 @@
+-- EXPERIMENT 5
+-- 1. Find the total number of instructors who teach a course in the Spring 2018 semester.
+select count(distinct id) from teaches where semester ="spring" and year = 2018;
++--------------------+
+| count(distinct id) |
++--------------------+
+|                  6 |
++--------------------+
+
+-- 2. Find the number of tuples in the teaches relation
+Select count(*) from teaches;
++----------+
+| count(*) |
++----------+
+|       16 |
++----------+
+
+-- 3. Find the average salary of instructors in each department
+select dept_name , avg(salary) from instructor group by dept_name;
++-----------+-------------+
+| dept_name | avg(salary) |
++-----------+-------------+
+| biology   |  69000.0000 |
+| comp.sci  |  77333.3333 |
+| elec.eng  |  80000.0000 |
+| finance   |  85000.0000 |
+| history   |  61000.0000 |
+| music     |  40000.0000 |
+| physics   |  91000.0000 |
++-----------+-------------+
+
+-- 4. Find the names and average salaries of all departments whose average salary is greater than 42000
+select dept_name , avg(salary) from instructor group by dept_name having avg(salary)> 42000;
++-----------+-------------+
+| dept_name | avg(salary) |
++-----------+-------------+
+| biology   |  69000.0000 |
+| comp.sci  |  77333.3333 |
+| elec.eng  |  80000.0000 |
+| finance   |  85000.0000 |
+| history   |  61000.0000 |
+| physics   |  91000.0000 |
++-----------+-------------+
+
+-- 5. Name all instructors whose name is neither “Mozart” nor Einstein”.
+select * from instructor where name not in ("mozarat","einstein");
++-------+------------+-----------+--------+
+| id    | name       | dept_name | salary |
++-------+------------+-----------+--------+
+| 10101 | srinivasan | comp.sci  |  65000 |
+| 10211 | smith      | biology   |  66000 |
+| 10212 | tom        | biology   |   NULL |
+| 12121 | wu         | finance   |  90000 |
+| 32343 | el said    | history   |  60000 |
+| 33456 | gold       | physics   |  87000 |
+| 45565 | katz       | comp.sci  |  75000 |
+| 58583 | califeri   | history   |  62000 |
+| 76543 | singh      | finance   |  80000 |
+| 76766 | crick      | biology   |  72000 |
+| 83821 | brandt     | comp.sci  |  92000 |
+| 98345 | kim        | elec.eng  |  80000 |
++-------+------------+-----------+--------+
+
+-- 6. Find names of instructors with salary greater than that of some (at least one) instructor in the Biology department.
+select * from instructor where salary> any (select salary from instructor where dept_name='biology');
++-------+----------+-----------+--------+
+| id    | name     | dept_name | salary |
++-------+----------+-----------+--------+
+| 12121 | wu       | finance   |  90000 |
+| 22222 | einstein | physics   |  95000 |
+| 33456 | gold     | physics   |  87000 |
+| 45565 | katz     | comp.sci  |  75000 |
+| 76543 | singh    | finance   |  80000 |
+| 76766 | crick    | biology   |  72000 |
+| 83821 | brandt   | comp.sci  |  92000 |
+| 98345 | kim      | elec.eng  |  80000 |
++-------+----------+-----------+--------+
+
+-- 7. Find the names of all instructors whose salary is greater than the salary of all instructors in the Biology department.
+select * from instructor where salary > all (select salary from instructor where dept_name='biology');
+
+-- 8. Find the average instructors’ salaries of those departments where the average salary is greater than 42,000.
+select dept_name,avg(salary) from instructor group by dept_name having avg(salary)> 42000;
++-----------+-------------+
+| dept_name | avg(salary) |
++-----------+-------------+
+| biology   |  69000.0000 |
+| comp.sci  |  77333.3333 |
+| elec.eng  |  80000.0000 |
+| finance   |  85000.0000 |
+| history   |  61000.0000 |
+| physics   |  91000.0000 |
++-----------+-------------+
+
+-- EXPERIMENT 6
+-- 1. Find all departments where the total salary is greater than the average of the total salary at all departments
+select dept_name,sum(salary), avg(salary) from instructor group by dept_name having sum(salary) > avg(salary);
+-- select avg(salary) from instructor;
+--  where salary >= (select avg(salary) from instructor group by dept_name)
++-----------+-------------+-------------+
+| dept_name | sum(salary) | avg(salary) |
++-----------+-------------+-------------+
+| biology   |      138000 |  69000.0000 |
+| comp.sci  |      232000 |  77333.3333 |
+| finance   |      170000 |  85000.0000 |
+| history   |      122000 |  61000.0000 |
+| physics   |      182000 |  91000.0000 |
++-----------+-------------+-------------+
+
+-- 2. List the names of instructors along with the course ID of the courses that they taught.
+select distinct name,course_id from instructor inner join teaches on instructor.id=teaches.id ;
++------------+-----------+
+| name       | course_id |
++------------+-----------+
+| srinivasan | CS-101    |
+| srinivasan | CS-315    |
+| srinivasan | CS-347    |
+| wu         | FIN-201   |
+| mozarat    | MU-199    |
+| einstein   | PHY-101   |
+| el said    | HIS-351   |
+| katz       | CS-319    |
+| crick      | BIO-101   |
+| crick      | BIO-301   |
+| brandt     | CS-190    |
+| brandt     | CS-319    |
+| kim        | EE-181    |
++------------+-----------+
+
+-- 3. List the names of instructors along with the course ID of the courses that they taught. In case, an instructor teaches no courses keep the course ID as null.
+select distinct name,course_id from instructor left join teaches on instructor.id=teaches.id ;
+
++------------+-----------+
+| name       | course_id |
++------------+-----------+
+| srinivasan | CS-101    |
+| srinivasan | CS-315    |
+| srinivasan | CS-347    |
+| smith      | NULL      |
+| tom        | NULL      |
+| wu         | FIN-201   |
+| mozarat    | MU-199    |
+| einstein   | PHY-101   |
+| el said    | HIS-351   |
+| gold       | NULL      |
+| katz       | CS-319    |
+| califeri   | NULL      |
+| singh      | NULL      |
+| crick      | BIO-101   |
+| crick      | BIO-301   |
+| brandt     | CS-190    |
+| brandt     | CS-319    |
+| kim        | EE-181    |
++------------+-----------+
+
+-- 4. Create a view of instructors without their salary called faculty
+create view FACULTY as select id, name, dept_name from instructor;
+select * from FACULTY;
+
++-------+------------+-----------+
+| id    | name       | dept_name |
++-------+------------+-----------+
+| 10101 | srinivasan | comp.sci  |
+| 10211 | smith      | biology   |
+| 10212 | tom        | biology   |
+| 12121 | wu         | finance   |
+| 15151 | mozarat    | music     |
+| 22222 | einstein   | physics   |
+| 32343 | el said    | history   |
+| 33456 | gold       | physics   |
+| 45565 | katz       | comp.sci  |
+| 58583 | califeri   | history   |
+| 76543 | singh      | finance   |
+| 76766 | crick      | biology   |
+| 83821 | brandt     | comp.sci  |
+| 98345 | kim        | elec.eng  |
++-------+------------+-----------+
+
+-- EXPERIMENT 7
+-- 1. Create a view of instructors without their salary called faculty
+create view FACULTY as select id, name, dept_name from instructor;
+
+-- 2. Create a view of department salary totals
+create view dept_salary as select dept_name,sum(salary) from instructor group by dept_name;
+-- drop view dept_salary;
+select * from dept_salary;
+
++-----------+-------------+
+| dept_name | sum(salary) |
++-----------+-------------+
+| biology   |      138000 |
+| comp.sci  |      232000 |
+| elec.eng  |       80000 |
+| finance   |      170000 |
+| history   |      122000 |
+| music     |       40000 |
+| physics   |      182000 |
++-----------+-------------+
+
+-- 3. CREATE A ROLE OF STUDENT
+create role student;
+
+-- 4. Give select privileges on the view faculty to the role student.
+grant select on Ads2_8.FACULTY to student;
+
+-- 5. Create a new user and assign her the role of student. 
+create user "student_user"@"localhost" identified by "root";
+-- grant select on Ads2_8.* to  "student_user"@"localhost";
+grant 'student' to "student_user"@"localhost";
+
+-- 6. Login as this new user and find all instructors in the Biology department.
+select name from instructor where dept_name ='biology';
+
+-- 7. Revoke privileges of the new user
+-- revoke select on Ads2_8.FACULTY from  "student_user"@"localhost";
++-------+
+| name  |
++-------+
+| smith |
+| tom   |
+| crick |
++-------+
+3 rows in set (0.000 sec)
+
+
+-- 8. Remove the role of student.
+drop role student;
+
+-- 9. Give select privileges on the view faculty to the new user.
+grant select on Ads2_8.FACULTY to  "student_user"@"localhost";
+
+-- 10. Login as this new user and find all instructors in the finance department.
+select name from Ads2_8.FACULTY where dept_name ='finance';
+
+-- 11. Login again as root user
+mysql - u root -p
+
+-- 12. Create table teaches2 with same columns as teaches.
+create table teaches2 select * from teaches;
+select * from teaches2;
+
++-------+-----------+--------+----------+------+
+| id    | course_id | sec_id | semester | year |
++-------+-----------+--------+----------+------+
+| 10101 | CS-101    |      1 | fall     | 2017 |
+| 10101 | CS-315    |      1 | spring   | 2018 |
+| 10101 | CS-347    |      1 | fall     | 2017 |
+| 12121 | FIN-201   |      1 | spring   | 2018 |
+| 15151 | MU-199    |      1 | spring   | 2018 |
+| 22222 | PHY-101   |      1 | fall     | 2017 |
+| 10101 | CS-101    |      1 | spring   | 2018 |
+| 32343 | HIS-351   |      1 | spring   | 2018 |
+| 45565 | CS-319    |      1 | spring   | 2018 |
+| 45565 | CS-319    |      1 | spring   | 2017 |
+| 76766 | BIO-101   |      1 | summer   | 2018 |
+| 76766 | BIO-301   |      1 | summer   | 2017 |
+| 83821 | CS-190    |      1 | spring   | 2017 |
+| 83821 | CS-190    |      2 | spring   | 2017 |
+| 83821 | CS-319    |      2 | spring   | 2018 |
+| 98345 | EE-181    |      1 | spring   | 2017 |
++-------+-----------+--------+----------+------+
+
+-- odbms
+-- query 1
+CREATE TYPE addr_ty AS OBJECT
+  2  (street    varchar2(60),
+  3  city       varchar2(30),
+  4  state      char(2),
+  5  zip        varchar(9));
+  6  /
+
+Type created.
+
+SQL> CREATE TYPE person_ty AS OBJECT
+  2     (name   varchar2(25),
+  3     address  addr_ty);
+  4  /
+
+Type created.
+
+SQL> CREATE TYPE emp_ty AS OBJECT
+  2     (empt_id        varchar2(9),
+  3     person  person_ty);
+  4
+  5  /
+
+Type created.
+
+-- query 2
+SQL> CREATE TABLE EMP_OO
+  2     (full_emp emp_ty);
+
+-- query 3
+-- insert
+insert into EMP_OO values( emp_ty('100', person_ty('ram', addr_ty('100 st','Patiala','up','605001'))));
+insert into EMP_OO values( emp_ty('101', person_ty('sam', addr_ty('101 st','sire','Blore','105001'))));
+
+
+-- query 4
+-- select
+select * from emp_oo;
+
+FULL_EMP(EMPT_ID, PERSON(NAME, ADDRESS(STREET, CITY, STATE, ZIP)))
+--------------------------------------------------------------------------------
+EMP_TY('100', PERSON_TY('Raj', ADDR_TY('1000 st', 'Patiala', 'up', '605001')))
+EMP_TY('101', PERSON_TY('sam', ADDR_TY('1001 st', 'sire', 'AP', '105001')))
+
+select e.full_emp.empt_id ID,e.full_emp.person.name NAME, e.full_emp.person.address.city CITY from emp_oo e;
+
+ID        NAME                      CITY
+--------- ------------------------- ------------------------------
+100       Raj                       Patiala
+101       sam                       sire
+
+
+-- query 5
+-- update
+update emp_oo e set e.full_emp.person.name = 'Raj' where e.full_emp.empt_id = '1000';
+
+
+-- query 6
+-- create new obj with member function
+create or replace type newemp_ty as object (firstname varchar2(25),
+lastname Varchar2(25), birthdate Date, member function age (birthdate in date) return number);
+
+
+-- query 7
+create or replace type body newemp_ty as 
+	member function age(birthdate in date) return number is 
+	begin
+		return round(sysdate - birthdate);
+	end;
+end;
+
+
+-- query 8
+create table new_emp_oo (employee newemp_ty);
+
+-- query 9
+insert into new_emp_oo values(newemp_ty('ram', 'lal','1976-12-12'));
+
+-- query 10 how to call a member function
+select e.employee.firstname, e.employee.age, e.employee.age(e.employee.birthdate) from new_emp_oo e;
+
+-- query 11 creation of object table 
+create table new_emp1 of emp_ty;
+
+
+-- query 12 
+insert into new_emp1 values('102',person_ty('raul',addr_ty('100 TU', 'Pta','PB', '147002'))));
+
+-- query 13
+select * from new_emp1;
+
+PERSON_TY('raul', ADDR_TY('100 TU', 'Pta', 'PB', '147002'))
+
+
+-- query 14 references
+select ref(p) from new_emp1 p;
+
+REF(P)
+--------------------------------------------------------------------------------
+0000280209E44C561C843C4E90B9AB35A22AD3E8FBAFAB0D508DDF493C87F3A6F19DC6804F0041DC
+C90000
+
+-- query 15 implementing the concept of fk
+create type new_dept_oo as object (deptno number(3),dname varchar(10));
+
+-- query 16
+create table dept_table of new_dept_oo;
+
+-- query 17
+insert into dept_table values (10,'comp');
+insert into dept_table values (20,'chem');
+insert into dept_table values (30,'math');
+
+
+-- query 18
+create table emp_test_fk(empno number(3), name varchar2(10), dept ref new_dept_oo);
+
+-- query 19
+set desc depth 2
+desc emp_test_fk
+
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(3)
+ NAME                                               VARCHAR2(10)
+ DEPT                                               REF OF NEW_DEPT_OO
+   DEPTNO                                           NUMBER(3)
+   DNAME                                            VARCHAR2(10)
+
+
+-- query 20
+insert into emp_test_fk select 100, 'raj', ref(p) from dept_table p where deptno =10;
+insert into emp_test_fk select 101, 'sam', ref(p) from dept_table p where deptno = 20;
+
+-- query 21 accessing values
+select empno, name, deref(e.dept) from emp_test_fk e;
+     EMPNO NAME
+---------- ----------
+DEREF(E.DEPT)(DEPTNO, DNAME)
+--------------------------------------------------------------------------------
+       100 raj
+NEW_DEPT_OO(10, 'comp')
+
+       101 sam
+NEW_DEPT_OO(20, 'chem')
+
+select empno, name, deref(e.dept), deref(e.dept).deptno DEPTNO,deref(e.dept).dname DNAME from emp_test_fk e;
+     EMPNO NAME
+---------- ----------
+DEREF(E.DEPT)(DEPTNO, DNAME)
+--------------------------------------------------------------------------------
+    DEPTNO DNAME
+---------- ----------
+       100 raj
+NEW_DEPT_OO(10, 'comp') 10 comp
+
+       101 sam
+NEW_DEPT_OO(20, 'chem') 20 chem
+
+     EMPNO NAME
+---------- ----------
+DEREF(E.DEPT)(DEPTNO, DNAME)
+--------------------------------------------------------------------------------
+    DEPTNO DNAME
+---------- ----------
+
+-- query 22
+ create table emp_table_fk (employee emp_ty, dept ref new_dept_oo);
+
+set desc depth 2
+
+-- query 23
+insert into emp_table_fk values (emp_ty('100', person_ty('ram', addr_ty('100 st','Patiala','up','605001'))), (select ref(p) from dept_table p where deptno = 10));
+
+-- query 24
+select * from em_table_fk;
+EMPLOYEE(EMPT_ID, PERSON(NAME, ADDRESS(STREET, CITY, STATE, ZIP)))
+--------------------------------------------------------------------------------
+DEPT
+--------------------------------------------------------------------------------
+EMP_TY('100', PERSON_TY('ram', ADDR_TY('100 st', 'Patiala', 'up', '605001')))
+00002202088ECB5F5DB94A44CD901A1BACD0D508D64D9EE4FAD8EF4404B2D19B5A449B8463
+
+select e.employee.empt_id ID, e.employee.person.name NAME, deref(e.dept), deref(e.dept).deptno DEPTNO,deref(e.dept).dname DNAME from emp_table_fk e;
+
+ID        NAME
+--------- -------------------------
+DEREF(E.DEPT)(DEPTNO, DNAME)
+--------------------------------------------------------------------------------
+    DEPTNO DNAME
+---------- ----------
+100       ram
+NEW_DEPT_OO(10, 'comp')
+        10 comp
